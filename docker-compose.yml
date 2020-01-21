@@ -1,23 +1,23 @@
 version: "3.5"
 
 services:
-  vpn:
-    image: netextender:latest
+  netextender:
+    image: docker-netextender:latest
     build:
-      context: .
+      context:    .
       dockerfile: "Dockerfile"
     restart: "no"
-    container_name: "netextender-vpn"
     networks:
       default:
     ports:
-      - "${PORT:-8080}:3389/tcp"
+      - "${SOURCE_PORT:-8080}:${TARGET_PORT:-3389}/tcp"
     environment:
-      VPN_SERVER:   "${VPN_SERVER}"
-      VPN_DOMAIN:   "${VPN_DOMAIN}"
-      VPN_PC:       "${VPN_PC}"
-      VPN_USERNAME: "${VPN_USERNAME}"
-      PORT:         "${PORT:-8080}"
+      VPN_SERVER:     "${VPN_SERVER}"
+      VPN_DOMAIN:     "${VPN_DOMAIN}"
+      VPN_USERNAME:   "${VPN_USERNAME}"
+      SOURCE_PORT:    "${SOURCE_PORT:-8080}"
+      TARGET_ADDRESS: "${TARGET_ADDRESS?TARGET_ADDRESS}"
+      TARGET_PORT:    "${TARGET_PORT:-3389}"
     # TODO(oparkes): Figure out the specific caps pppd needs to "enable" PPP kernel support
     privileged: true
     # cap_add:

@@ -1,5 +1,4 @@
 FROM library/debian:stretch-slim
-LABEL maintainer "Omar Parkes"
 
 ARG NETEXTENDER_ARCH="x86_64"
 ENV NETEXTENDER_URL "https://sslvpn.demo.sonicwall.com/NetExtender.${NETEXTENDER_ARCH}.tgz"

@@ -1,13 +1,12 @@
 #! /usr/bin/env bash
 
 [[ ! -f /.dockerenv ]] && echo "Not running in a docker container." && exit 1
-
 [[ ! -e /dev/ppp ]] && sudo mknod /dev/ppp c 108 0
 
-if [ ! -z "${VPN_PC}" ]; then
-	echo "Forwarding 0.0.0.0:3389 to ${VPN_PC}:3389"
+if [ ! -z "${TARGET_ADDRESS}" ]; then
+	echo "Forwarding 0.0.0.0:${TARGET_PORT} to ${TARGET_ADDRESS}:${TARGET_PORT}"
 	sudo iptables -F
-	sudo iptables -t nat -A PREROUTING -p tcp --dport 3389 -j DNAT --to-destination ${VPN_PC}:3389
+	sudo iptables -t nat -A PREROUTING -p tcp --dport ${TARGET_PORT} -j DNAT --to-destination ${TARGET_ADDRESS}:${TARGET_PORT}
 	sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 
 	for iface in $(ip a | grep eth | grep inet | awk '{print $2}'); do
